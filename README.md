@@ -113,7 +113,7 @@ Everything required is already in the office. IDs refer to `awggie/PartsInventor
 | 1 | Electrolytic cap, ≥50 V | CAP-003 | Drawer 3 | 47–100 µF if the kit has one at 50 V; otherwise 2–4 × 10 µF/50 V in parallel |
 | 1 | Tactile push button | SW-001 | Bottom drawer | Mode cycling |
 | 1 | 60 × 40 mm perfboard | PROTO-004 | Parts bin row 3 | Breadboard first on PROTO-002 |
-| 1 + 1 | Screw terminals: one 2-pin, one 3-pin | CON-009 | Parts bin row 3 | 2-pin for J1, 3-pin for J3 |
+| 1 + 1 | Screw terminals: one 2-pin, one 3-pin | CON-009 / CON-014 | Parts bin row 3 | 2-pin for J1, 3-pin for J3 |
 | — | Pin headers (male for the XIAO, female 3-pin for J2) | CON-008 | Parts bin row 3 | |
 | 3 | F-F Dupont jumpers | CAB-004 | Top drawer | XIAO D0/D1/D3 → J2 |
 | — | 24 AWG wire, heat shrink | WIRE-004, CONS-005 | Wire rack / parts bin | |
