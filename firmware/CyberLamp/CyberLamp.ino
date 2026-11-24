@@ -8,9 +8,11 @@
  *   - Drives the module's two LED strings independently with PWM:
  *       amber string (module pin 2) and white string (module pin 4),
  *       both returning through module pin 1 (shared negative).
- *   - Each string is fed by its own LM317 constant-current source (~27 mA),
+ *   - Each string is fed by its own LM317 constant-current source (~189 mA),
  *     switched on its high side by a PNP transistor. PWM on that switch
  *     sets brightness. GPIO HIGH = LEDs on.
+ *   - A power cap keeps both strings together under ~1.25 strings' worth of
+ *     current, so the USB-C supply is never asked for more than ~2 A.
  *   - Modes: off, steady amber, steady white, amber breathing,
  *     "failing streetlight" glitch, and glitch + white arc flashes.
  *   - Control three ways:
@@ -117,9 +119,22 @@ const char *lampModeBadgeColors[MODE_COUNT] = {
 LampMode currentLampMode = MODE_AMBER_STEADY;
 
 // User-adjustable maximum brightness for each string, 0.0–1.0.
-// Effects scale within this ceiling. Full scale ≈ 27 mA, set by the LM317 resistor.
+// Effects scale within this ceiling. Full scale ≈ 189 mA, set by the LM317 resistor
+// (1.25 V ÷ 6.6 Ω). 30 mA (~15%) was already plenty for ambient light on the bench.
 float amberChannelLevel = 0.8f;
 float whiteChannelLevel = 0.5f;
+
+// ============================================================
+// Power cap
+// ============================================================
+
+// Both strings draw from the same 30 V boost rail, and every milliamp on that rail
+// costs about 7 at the 5 V USB input (30 V ÷ 5 V, plus boost losses). One string at full PWM pulls ~1.5 A from USB;
+// both at full would pull ~2.8 A, right at USB-C's 3 A limit. This caps the
+// combined PWM duty at 1.25 strings' worth (~2 A from USB, ESP32 included).
+// Only arcing mode lights both strings at once, so in practice the cap only
+// trims the amber string during a white flash, which reads as the lamp sagging.
+const float maxCombinedDutyInStrings = 1.25f;
 
 // ============================================================
 // Breathing effect
@@ -304,9 +319,19 @@ void updateLampOutputs() {
 			break;
 	}
 
-	// Scale by each string's user-set ceiling, then write gamma-corrected PWM.
-	ledcWrite(amberChannelPin, brightnessToDuty(amberEffectBrightness * amberChannelLevel));
-	ledcWrite(whiteChannelPin, brightnessToDuty(whiteEffectBrightness * whiteChannelLevel));
+	// Scale by each string's user-set ceiling, then convert to gamma-corrected PWM.
+	uint32_t amberDuty = brightnessToDuty(amberEffectBrightness * amberChannelLevel);
+	uint32_t whiteDuty = brightnessToDuty(whiteEffectBrightness * whiteChannelLevel);
+
+	// Apply the power cap. PWM duty is proportional to rail current, so the cap works on
+	// duty, not perceived brightness. White keeps its full flash; amber gives way.
+	const uint32_t maxCombinedDuty = (uint32_t)(maxCombinedDutyInStrings * maxDutyValue);
+	if (amberDuty + whiteDuty > maxCombinedDuty) {
+		amberDuty = maxCombinedDuty - whiteDuty;  // whiteDuty ≤ maxDutyValue < maxCombinedDuty, so no underflow
+	}
+
+	ledcWrite(amberChannelPin, amberDuty);
+	ledcWrite(whiteChannelPin, whiteDuty);
 }
 
 // ============================================================

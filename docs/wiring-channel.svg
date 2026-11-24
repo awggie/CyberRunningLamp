@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="420" viewBox="0 0 940 420" role="img" aria-label="Schematic of one driver channel: NPN level shifter, PNP high-side switch, LM317 current source">
+<style>svg {
+  --bg: #eef1f4; --panel: #ffffff; --ink: #1b2430; --muted: #5b6676; --rule: #c9d0d8; --accent: #b8680a;
+  --w30: #d0342c; --w5: #7b4fd6; --wgnd: #1b2430; --d0: #c8740a; --d1: #2378b5; --d3: #2e9a5a; --wwhite: #8a94a3;
+  --xiao: rgba(47,110,220,.14); --boost: rgba(208,52,44,.12); --perf: rgba(46,154,90,.13);
+  --sans: "IBM Plex Sans", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+svg text { font-family: var(--sans); fill: var(--ink); font-size: 13px; }
+svg .sm { font-size: 11px; fill: var(--muted); }
+svg .mono { font-family: var(--mono); font-size: 11px; }
+svg .ttl { font-weight: 600; font-size: 14px; }
+svg .wall { fill: none; stroke: var(--muted); stroke-width: 3; }
+svg .part { stroke: var(--ink); stroke-width: 1.5; }
+svg .xiao { fill: var(--xiao); } svg .boost { fill: var(--boost); } svg .perf { fill: var(--perf); }
+svg .blk { fill: var(--panel); stroke: var(--ink); stroke-width: 1.5; }
+svg .dash { fill: none; stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 5 4; }
+svg .w { fill: none; stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+svg .thin { fill: none; stroke-width: 2; }
+svg .w30 { stroke: var(--w30); } svg .w5 { stroke: var(--w5); } svg .wg { stroke: var(--wgnd); }
+svg .d0 { stroke: var(--d0); } svg .d1 { stroke: var(--d1); } svg .d3 { stroke: var(--d3); } svg .ww { stroke: var(--wwhite); }
+svg .pin { fill: var(--panel); stroke: var(--ink); stroke-width: 1.2; }
+svg .pinon { fill: var(--ink); }
+svg .screw { fill: var(--panel); stroke: var(--ink); stroke-width: 1.2; }
+svg .ln { stroke: var(--ink); stroke-width: 2; fill: none; }
+svg .dot { fill: var(--ink); }
+svg .res { fill: var(--panel); stroke: var(--ink); stroke-width: 2; }
+svg .resd { fill: var(--panel); stroke: var(--ink); stroke-width: 2; stroke-dasharray: 5 3; }
+svg .fillink { fill: var(--ink); }
+</style>
+<rect x="0" y="0" width="940" height="420" fill="#ffffff"/>
+    <!-- rails -->
+    <line class="ln w30" x1="60" y1="40" x2="430" y2="40" style="stroke:var(--w30)"/>
+    <text class="sm" x="60" y="30">+30 V bus (J1)</text>
+    <line class="ln" x1="60" y1="385" x2="880" y2="385"/>
+    <text class="sm" x="60" y="405">GND bus (J1, module pin 1 return)</text>
+
+    <!-- input -->
+    <text class="mono" x="20" y="246">D0</text>
+    <text class="sm" x="20" y="272">(D1 white)</text>
+    <line class="ln" x1="46" y1="250" x2="110" y2="250"/>
+    <rect class="res" x="110" y="241" width="60" height="18"/>
+    <text x="140" y="232" text-anchor="middle">R1 4.7k</text>
+    <line class="ln" x1="170" y1="250" x2="258" y2="250"/>
+    <circle class="dot" cx="210" cy="250" r="3.5"/>
+    <line class="ln" x1="210" y1="250" x2="210" y2="290"/>
+    <rect class="res" x="201" y="290" width="18" height="60"/>
+    <line class="ln" x1="210" y1="350" x2="210" y2="385"/>
+    <text x="226" y="325">R2 100k</text>
+
+    <!-- Q1 NPN -->
+    <circle class="ln" cx="272" cy="250" r="28"/>
+    <line class="ln" x1="258" y1="233" x2="258" y2="267" style="stroke-width:3"/>
+    <polyline class="ln" points="258,243 282,228 282,180"/>
+    <polyline class="ln" points="258,257 282,272 282,385"/>
+    <polygon class="fillink" points="282,272 271,270 277,262"/>
+    <text x="310" y="248">Q1 2N3904</text>
+    <text class="sm" x="310" y="264">NPN</text>
+
+    <!-- R3 -->
+    <line class="ln" x1="282" y1="180" x2="282" y2="170"/>
+    <rect class="res" x="273" y="130" width="18" height="40"/>
+    <line class="ln" x1="282" y1="130" x2="282" y2="110"/>
+    <text x="300" y="160">R3 4.7k ∥ 4.7k</text>
+
+    <!-- PNP base lead + R4 -->
+    <line class="ln" x1="282" y1="110" x2="368" y2="110"/>
+    <circle class="dot" cx="320" cy="110" r="3.5"/>
+    <line class="ln" x1="320" y1="110" x2="320" y2="95"/>
+    <rect class="res" x="311" y="55" width="18" height="40"/>
+    <line class="ln" x1="320" y1="55" x2="320" y2="40"/>
+    <circle class="dot" cx="320" cy="40" r="3.5"/>
+    <text x="304" y="80" text-anchor="end">R4 4.7k</text>
+
+    <!-- Q2 PNP -->
+    <circle class="ln" cx="382" cy="110" r="28"/>
+    <line class="ln" x1="368" y1="93" x2="368" y2="127" style="stroke-width:3"/>
+    <polyline class="ln" points="368,102 392,87 392,40"/>
+    <polygon class="fillink" points="369,102 379,95 381,103"/>
+    <circle class="dot" cx="392" cy="40" r="3.5"/>
+    <polyline class="ln" points="368,118 392,133 392,210 470,210"/>
+    <text x="420" y="104">Q2 2N5401</text>
+    <text class="sm" x="420" y="120">PNP</text>
+
+    <!-- LM317 -->
+    <rect class="blk" x="470" y="180" width="120" height="60" rx="3"/>
+    <text class="ttl" x="530" y="215" text-anchor="middle">LM317</text>
+    <text class="sm" x="476" y="205">IN</text>
+    <text class="sm" x="584" y="192" text-anchor="end">OUT</text>
+    <text class="sm" x="530" y="235" text-anchor="middle">ADJ</text>
+    <polyline class="ln" points="590,195 650,195 650,215"/>
+    <rect class="res" x="641" y="215" width="18" height="50"/>
+    <line class="ln" x1="650" y1="265" x2="650" y2="290"/>
+    <text x="670" y="236">R5 3.3 Ω + 3.3 Ω</text>
+    <text class="sm" x="670" y="252">1.25 V ÷ 6.6 Ω ≈ 189 mA</text>
+    <polyline class="ln" points="530,240 530,290 650,290"/>
+    <circle class="dot" cx="650" cy="290" r="3.5"/>
+
+    <!-- R6 white only -->
+    <line class="ln" x1="650" y1="290" x2="700" y2="290"/>
+    <rect class="resd" x="700" y="281" width="80" height="18"/>
+    <text x="740" y="320" text-anchor="middle">R6 4 × 10 Ω</text>
+    <text class="sm" x="740" y="336" text-anchor="middle">white only (amber: wire)</text>
+    <line class="ln" x1="780" y1="290" x2="840" y2="290"/>
+
+    <!-- output + LED string -->
+    <circle class="screw" cx="840" cy="290" r="6"/>
+    <text x="856" y="286">J3</text>
+    <text class="sm" x="856" y="270">to module</text>
+    <line class="ln" x1="840" y1="296" x2="840" y2="306"/>
+    <polygon class="fillink" points="830,306 850,306 840,322"/>
+    <line class="ln" x1="828" y1="322" x2="852" y2="322"/>
+    <line class="ln" x1="840" y1="322" x2="840" y2="330"/>
+    <polygon class="fillink" points="830,330 850,330 840,346"/>
+    <line class="ln" x1="828" y1="346" x2="852" y2="346"/>
+    <line class="ln" x1="840" y1="346" x2="840" y2="366"/>
+    <text class="sm" x="856" y="332">LED string</text>
+    <text class="sm" x="856" y="346">(in module)</text>
+    <circle class="screw" cx="840" cy="372" r="6"/>
+    <line class="ln" x1="840" y1="378" x2="840" y2="385"/>
+    <text class="sm" x="856" y="376">J3 pin 3 → module pin 1</text>
+  </svg>

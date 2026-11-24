@@ -1,0 +1,389 @@
+<title>CyberLamp Wiring</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: single drafting-sheet column; diagrams full width in scroll boxes, tables below each. */
+:root {
+  --bg: #eef1f4; --panel: #ffffff; --ink: #1b2430; --muted: #5b6676; --rule: #c9d0d8; --accent: #b8680a;
+  --w30: #d0342c; --w5: #7b4fd6; --wgnd: #1b2430; --d0: #c8740a; --d1: #2378b5; --d3: #2e9a5a; --wwhite: #8a94a3;
+  --xiao: rgba(47,110,220,.14); --boost: rgba(208,52,44,.12); --perf: rgba(46,154,90,.13);
+  --sans: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12161c; --panel: #1a2029; --ink: #e6ebf1; --muted: #9aa5b3; --rule: #2e3744; --accent: #f0a23b;
+  --w30: #ff5a4f; --w5: #a585ff; --wgnd: #e6ebf1; --d0: #f0a23b; --d1: #4fb0f0; --d3: #4fcf86; --wwhite: #c9d2dd;
+  --xiao: rgba(79,140,240,.18); --boost: rgba(255,90,79,.14); --perf: rgba(79,207,134,.13); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12161c; --panel: #1a2029; --ink: #e6ebf1; --muted: #9aa5b3; --rule: #2e3744; --accent: #f0a23b;
+  --w30: #ff5a4f; --w5: #a585ff; --wgnd: #e6ebf1; --d0: #f0a23b; --d1: #4fb0f0; --d3: #4fcf86; --wwhite: #c9d2dd;
+  --xiao: rgba(79,140,240,.18); --boost: rgba(255,90,79,.14); --perf: rgba(79,207,134,.13); color-scheme: dark }
+
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.55; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 32px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 40px; }
+header { display: grid; gap: 8px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.1; margin: 0; text-wrap: balance; }
+h2 { font-size: 21px; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 68ch; }
+.lede { color: var(--muted); }
+section { display: grid; gap: 14px; min-width: 0; }
+.sheet { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; overflow-x: auto; }
+.sheet svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.legend i { width: 22px; height: 4px; border-radius: 2px; display: inline-block; }
+.tbl { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+tr:last-child td { border-bottom: 0; }
+td code, p code, li code { font-family: var(--mono); font-size: 13px; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.card { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 16px; display: grid; gap: 8px; min-width: 0; }
+.card h3 { margin: 0; font-size: 15px; }
+.card pre { margin: 0; font-family: var(--mono); font-size: 13px; line-height: 1.45; overflow-x: auto; }
+ol, ul { margin: 0; padding-left: 22px; display: grid; gap: 6px; max-width: 72ch; }
+.warn { border-left: 3px solid var(--w30); padding: 10px 14px; background: var(--panel); border-radius: 0 6px 6px 0; }
+
+/* SVG styling via tokens */
+svg text { font-family: var(--sans); fill: var(--ink); font-size: 13px; }
+svg .sm { font-size: 11px; fill: var(--muted); }
+svg .mono { font-family: var(--mono); font-size: 11px; }
+svg .ttl { font-weight: 600; font-size: 14px; }
+svg .wall { fill: none; stroke: var(--muted); stroke-width: 3; }
+svg .part { stroke: var(--ink); stroke-width: 1.5; }
+svg .xiao { fill: var(--xiao); } svg .boost { fill: var(--boost); } svg .perf { fill: var(--perf); }
+svg .blk { fill: var(--panel); stroke: var(--ink); stroke-width: 1.5; }
+svg .dash { fill: none; stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 5 4; }
+svg .w { fill: none; stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+svg .thin { fill: none; stroke-width: 2; }
+svg .w30 { stroke: var(--w30); } svg .w5 { stroke: var(--w5); } svg .wg { stroke: var(--wgnd); }
+svg .d0 { stroke: var(--d0); } svg .d1 { stroke: var(--d1); } svg .d3 { stroke: var(--d3); } svg .ww { stroke: var(--wwhite); }
+svg .pin { fill: var(--panel); stroke: var(--ink); stroke-width: 1.2; }
+svg .pinon { fill: var(--ink); }
+svg .screw { fill: var(--panel); stroke: var(--ink); stroke-width: 1.2; }
+svg .ln { stroke: var(--ink); stroke-width: 2; fill: none; }
+svg .dot { fill: var(--ink); }
+svg .res { fill: var(--panel); stroke: var(--ink); stroke-width: 2; }
+svg .resd { fill: var(--panel); stroke: var(--ink); stroke-width: 2; stroke-dasharray: 5 3; }
+svg .fillink { fill: var(--ink); }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">CyberLamp · 190 mA build · Rev B</div>
+  <h1>CyberLamp wiring</h1>
+  <p class="lede">Top-down view of the base with the lid off, matched to the mounts in <code>cad/cyberlamp_housing.py</code>: perfboard front-left, XL6019 front-right, XIAO in its cradle at the back wall. Each string runs at about 189 mA from a 30 V rail.</p>
+</header>
+
+<section>
+  <h2>Whole system</h2>
+  <div class="sheet">
+  <svg viewBox="0 0 1000 690" role="img" aria-label="Top-down wiring of the CyberLamp base: XIAO, XL6019 boost module, driver perfboard, button and LED module wires">
+    <!-- tub -->
+    <rect class="wall" x="40" y="40" width="920" height="600" rx="26"/>
+    <text class="sm" x="60" y="30">BACK WALL</text>
+    <text class="sm" x="60" y="664">FRONT WALL (vents, button)</text>
+
+    <!-- USB-C port -->
+    <rect class="blk" x="640" y="33" width="40" height="14" rx="4"/>
+    <text class="sm" x="692" y="30">USB-C in · 5 V / 3 A charger</text>
+
+    <!-- XIAO -->
+    <rect class="part xiao" x="580" y="60" width="160" height="150" rx="6"/>
+    <text class="ttl" x="660" y="140" text-anchor="middle">XIAO ESP32S3</text>
+    <text class="sm" x="660" y="157" text-anchor="middle">parts up, pins up</text>
+    <text class="sm" x="660" y="173" text-anchor="middle">U.FL antenna on top</text>
+    <g class="mono">
+      <circle class="pin pinon" cx="580" cy="85" r="4"/><text x="590" y="89">D0</text>
+      <circle class="pin pinon" cx="580" cy="103" r="4"/><text x="590" y="107">D1</text>
+      <circle class="pin" cx="580" cy="121" r="4"/><text class="sm mono" x="590" y="125">D2</text>
+      <circle class="pin pinon" cx="580" cy="139" r="4"/><text x="590" y="143">D3</text>
+      <circle class="pin" cx="580" cy="157" r="4"/><text class="sm mono" x="590" y="161">D4</text>
+      <circle class="pin" cx="580" cy="175" r="4"/><text class="sm mono" x="590" y="179">D5</text>
+      <circle class="pin" cx="580" cy="193" r="4"/><text class="sm mono" x="590" y="197">D6</text>
+      <circle class="pin pinon" cx="740" cy="85" r="4"/><text x="730" y="89" text-anchor="end">5V</text>
+      <circle class="pin pinon" cx="740" cy="103" r="4"/><text x="730" y="107" text-anchor="end">GND</text>
+      <circle class="pin" cx="740" cy="121" r="4"/><text class="sm mono" x="730" y="125" text-anchor="end">3V3</text>
+      <circle class="pin" cx="740" cy="139" r="4"/><text class="sm mono" x="730" y="143" text-anchor="end">D10</text>
+      <circle class="pin" cx="740" cy="157" r="4"/><text class="sm mono" x="730" y="161" text-anchor="end">D9</text>
+      <circle class="pin" cx="740" cy="175" r="4"/><text class="sm mono" x="730" y="179" text-anchor="end">D8</text>
+      <circle class="pin" cx="740" cy="193" r="4"/><text class="sm mono" x="730" y="197" text-anchor="end">D7</text>
+    </g>
+
+    <!-- Boost -->
+    <rect class="part boost" x="560" y="380" width="300" height="140" rx="4"/>
+    <text class="ttl" x="710" y="448" text-anchor="middle">XL6019 boost</text>
+    <text class="sm" x="710" y="466" text-anchor="middle">set to 30 V before connecting</text>
+    <rect class="blk" x="530" y="410" width="30" height="80" rx="3"/>
+    <circle class="screw" cx="545" cy="435" r="7"/><circle class="screw" cx="545" cy="465" r="7"/>
+    <text class="sm" x="545" y="402" text-anchor="middle">OUT</text>
+    <rect class="blk" x="860" y="410" width="30" height="80" rx="3"/>
+    <circle class="screw" cx="875" cy="435" r="7"/><circle class="screw" cx="875" cy="465" r="7"/>
+    <text class="sm" x="875" y="402" text-anchor="middle">IN</text>
+    <text class="mono" x="588" y="439">OUT+</text><text class="mono" x="588" y="469">OUT−</text>
+    <text class="mono" x="832" y="439" text-anchor="end">IN−</text><text class="mono" x="832" y="469" text-anchor="end">IN+</text>
+
+    <!-- Perfboard -->
+    <rect class="part perf" x="100" y="300" width="380" height="260" rx="4"/>
+    <line class="thin w30" x1="115" y1="318" x2="380" y2="318"/>
+    <text class="sm" x="118" y="312">+30 V bus</text>
+    <line class="thin wg" x1="115" y1="545" x2="440" y2="545"/>
+    <text class="sm" x="118" y="539">GND bus</text>
+    <rect class="dash" x="120" y="332" width="160" height="196" rx="4"/>
+    <text class="ttl" x="200" y="412" text-anchor="middle">Amber</text>
+    <text class="sm" x="200" y="430" text-anchor="middle">D0 → pin 2</text>
+    <text class="sm" x="200" y="446" text-anchor="middle">LM317 · 2N5401 · 2N3904</text>
+    <rect class="dash" x="292" y="332" width="133" height="196" rx="4"/>
+    <text class="ttl" x="358" y="412" text-anchor="middle">White</text>
+    <text class="sm" x="358" y="430" text-anchor="middle">D1 → pin 4</text>
+    <text class="sm" x="358" y="446" text-anchor="middle">+ 4 × 10 Ω</text>
+    <text class="sm" x="110" y="580">Driver perfboard · 60 × 40 mm</text>
+
+    <!-- J2 header -->
+    <rect class="blk" x="390" y="294" width="60" height="12" rx="2"/>
+    <circle class="pinon" cx="400" cy="300" r="3"/><circle class="pinon" cx="420" cy="300" r="3"/><circle class="pinon" cx="440" cy="300" r="3"/>
+    <text class="sm" x="458" y="290">J2</text>
+
+    <!-- J1 & J3 -->
+    <rect class="blk" x="450" y="420" width="30" height="60" rx="3"/>
+    <circle class="screw" cx="465" cy="435" r="7"/><circle class="screw" cx="465" cy="465" r="7"/>
+    <text class="sm" x="444" y="454" text-anchor="end">J1</text>
+    <rect class="blk" x="450" y="490" width="30" height="60" rx="3"/>
+    <circle class="screw" cx="465" cy="502" r="6"/><circle class="screw" cx="465" cy="520" r="6"/><circle class="screw" cx="465" cy="538" r="6"/>
+    <text class="sm" x="444" y="524" text-anchor="end">J3</text>
+    <rect class="screw" x="400" y="555" width="10" height="10"/><rect class="screw" x="430" y="555" width="10" height="10"/>
+    <text class="sm" x="392" y="578" text-anchor="end">BTN pads</text>
+
+    <!-- Button -->
+    <rect class="blk" x="398" y="610" width="44" height="24" rx="3"/>
+    <circle class="fillink" cx="420" cy="622" r="6"/>
+    <text class="sm" x="390" y="627" text-anchor="end">Mode button</text>
+
+    <!-- Lid slot -->
+    <rect class="dash" x="500" y="585" width="60" height="22" rx="4"/>
+    <text class="sm" x="572" y="594">Lid slot: wires go up to the LED module</text>
+    <text class="sm" x="572" y="610">J3 → module pin 2 · pin 4 · pin 1</text>
+
+    <!-- Wires: power -->
+    <polyline class="w w5" points="740,85 920,85 920,465 890,465"/>
+    <polyline class="w wg" points="740,103 905,103 905,435 890,435"/>
+    <text class="sm" x="790" y="79">5 V</text>
+    <text class="sm" x="790" y="97">GND</text>
+    <polyline class="w w30" points="530,435 480,435"/>
+    <polyline class="w wg" points="530,465 480,465"/>
+    <!-- Wires: signals -->
+    <polyline class="w d0" points="580,85 400,85 400,300"/>
+    <polyline class="w d1" points="580,103 420,103 420,300"/>
+    <polyline class="w d3" points="580,139 440,139 440,300"/>
+    <text class="sm" x="470" y="79">D0</text><text class="sm" x="470" y="97">D1</text><text class="sm" x="470" y="133">D3</text>
+    <!-- Button wires -->
+    <polyline class="w d3" points="405,565 405,610"/>
+    <polyline class="w wg" points="435,565 435,610"/>
+    <!-- LED wires -->
+    <polyline class="w d0" points="480,502 510,502 510,585"/>
+    <polyline class="w ww" points="480,520 525,520 525,585"/>
+    <polyline class="w wg" points="480,538 540,538 540,585"/>
+  </svg>
+  </div>
+  <div class="legend">
+    <span><i style="background:var(--w5)"></i>5 V</span>
+    <span><i style="background:var(--w30)"></i>+30 V rail</span>
+    <span><i style="background:var(--wgnd)"></i>Ground</span>
+    <span><i style="background:var(--d0)"></i>D0 / amber +</span>
+    <span><i style="background:var(--d1)"></i>D1</span>
+    <span><i style="background:var(--wwhite)"></i>White +</span>
+    <span><i style="background:var(--d3)"></i>D3 button</span>
+  </div>
+  <p class="lede">The terminal order (+/−) on your XL6019 may differ from this drawing. Follow the silkscreen.</p>
+</section>
+
+<section>
+  <h2>Wire list</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>From</th><th>To</th><th>Wire</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><span class="sw" style="background:var(--w5)"></span>XIAO 5V</td><td>XL6019 IN+</td><td>24 AWG, soldered to the pin</td><td>Carries up to ~2 A. Too much for a Dupont jumper.</td></tr>
+      <tr><td><span class="sw" style="background:var(--wgnd)"></span>XIAO GND</td><td>XL6019 IN−</td><td>24 AWG, soldered to the pin</td><td>The XIAO's only GND pin. It grounds everything through the boost module.</td></tr>
+      <tr><td><span class="sw" style="background:var(--w30)"></span>XL6019 OUT+</td><td>J1 +30 V</td><td>24 AWG</td><td>Feeds the +30 V bus.</td></tr>
+      <tr><td><span class="sw" style="background:var(--wgnd)"></span>XL6019 OUT−</td><td>J1 GND</td><td>24 AWG</td><td>Feeds the GND bus.</td></tr>
+      <tr><td><span class="sw" style="background:var(--d0)"></span>XIAO D0</td><td>J2 pin 1</td><td>F-F Dupont</td><td>Amber channel</td></tr>
+      <tr><td><span class="sw" style="background:var(--d1)"></span>XIAO D1</td><td>J2 pin 2</td><td>F-F Dupont</td><td>White channel</td></tr>
+      <tr><td><span class="sw" style="background:var(--d3)"></span>XIAO D3</td><td>J2 pin 3</td><td>F-F Dupont</td><td>Runs on the perfboard to the BTN pad.</td></tr>
+      <tr><td>Button leg A</td><td>BTN pad (D3)</td><td>24 AWG</td><td>No resistor needed: the firmware uses the internal pull-up.</td></tr>
+      <tr><td>Button leg B</td><td>BTN pad (GND bus)</td><td>24 AWG</td><td></td></tr>
+      <tr><td><span class="sw" style="background:var(--d0)"></span>J3 pin 1</td><td>Module pin 2 (amber +)</td><td>24 AWG → 30 AWG at the module</td><td>Up through the lid slot. Solder at the module, then heat-shrink.</td></tr>
+      <tr><td><span class="sw" style="background:var(--wwhite)"></span>J3 pin 2</td><td>Module pin 4 (white +)</td><td>24 AWG → 30 AWG at the module</td><td></td></tr>
+      <tr><td><span class="sw" style="background:var(--wgnd)"></span>J3 pin 3</td><td>Module pin 1 (common −)</td><td>24 AWG → 30 AWG at the module</td><td>Leave module pin 3 and any pins after 4 unconnected.</td></tr>
+      <tr><td>Antenna</td><td>XIAO U.FL</td><td>—</td><td>Press it on before you plug in the jumpers.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="warn"><strong>One ground path.</strong> The XIAO and the perfboard share ground only through the XL6019, whose IN− and OUT− are joined on the module. Before wiring, use a continuity check to confirm IN− and OUT− are connected on your board.</p>
+</section>
+
+<section>
+  <h2>One driver channel (build two)</h2>
+  <p>Amber: <strong>D0</strong> in, <strong>J3 pin 1 → module pin 2</strong> out, with a plain wire where R6 is drawn. White: <strong>D1</strong> in, <strong>J3 pin 2 → module pin 4</strong> out, with R6 fitted.</p>
+  <div class="sheet">
+  <svg viewBox="0 0 940 420" role="img" aria-label="Schematic of one driver channel: NPN level shifter, PNP high-side switch, LM317 current source">
+    <!-- rails -->
+    <line class="ln w30" x1="60" y1="40" x2="430" y2="40" style="stroke:var(--w30)"/>
+    <text class="sm" x="60" y="30">+30 V bus (J1)</text>
+    <line class="ln" x1="60" y1="385" x2="880" y2="385"/>
+    <text class="sm" x="60" y="405">GND bus (J1, module pin 1 return)</text>
+
+    <!-- input -->
+    <text class="mono" x="20" y="246">D0</text>
+    <text class="sm" x="20" y="272">(D1 white)</text>
+    <line class="ln" x1="46" y1="250" x2="110" y2="250"/>
+    <rect class="res" x="110" y="241" width="60" height="18"/>
+    <text x="140" y="232" text-anchor="middle">R1 4.7k</text>
+    <line class="ln" x1="170" y1="250" x2="258" y2="250"/>
+    <circle class="dot" cx="210" cy="250" r="3.5"/>
+    <line class="ln" x1="210" y1="250" x2="210" y2="290"/>
+    <rect class="res" x="201" y="290" width="18" height="60"/>
+    <line class="ln" x1="210" y1="350" x2="210" y2="385"/>
+    <text x="226" y="325">R2 100k</text>
+
+    <!-- Q1 NPN -->
+    <circle class="ln" cx="272" cy="250" r="28"/>
+    <line class="ln" x1="258" y1="233" x2="258" y2="267" style="stroke-width:3"/>
+    <polyline class="ln" points="258,243 282,228 282,180"/>
+    <polyline class="ln" points="258,257 282,272 282,385"/>
+    <polygon class="fillink" points="282,272 271,270 277,262"/>
+    <text x="310" y="248">Q1 2N3904</text>
+    <text class="sm" x="310" y="264">NPN</text>
+
+    <!-- R3 -->
+    <line class="ln" x1="282" y1="180" x2="282" y2="170"/>
+    <rect class="res" x="273" y="130" width="18" height="40"/>
+    <line class="ln" x1="282" y1="130" x2="282" y2="110"/>
+    <text x="300" y="160">R3 4.7k ∥ 4.7k</text>
+
+    <!-- PNP base lead + R4 -->
+    <line class="ln" x1="282" y1="110" x2="368" y2="110"/>
+    <circle class="dot" cx="320" cy="110" r="3.5"/>
+    <line class="ln" x1="320" y1="110" x2="320" y2="95"/>
+    <rect class="res" x="311" y="55" width="18" height="40"/>
+    <line class="ln" x1="320" y1="55" x2="320" y2="40"/>
+    <circle class="dot" cx="320" cy="40" r="3.5"/>
+    <text x="304" y="80" text-anchor="end">R4 4.7k</text>
+
+    <!-- Q2 PNP -->
+    <circle class="ln" cx="382" cy="110" r="28"/>
+    <line class="ln" x1="368" y1="93" x2="368" y2="127" style="stroke-width:3"/>
+    <polyline class="ln" points="368,102 392,87 392,40"/>
+    <polygon class="fillink" points="369,102 379,95 381,103"/>
+    <circle class="dot" cx="392" cy="40" r="3.5"/>
+    <polyline class="ln" points="368,118 392,133 392,210 470,210"/>
+    <text x="420" y="104">Q2 2N5401</text>
+    <text class="sm" x="420" y="120">PNP</text>
+
+    <!-- LM317 -->
+    <rect class="blk" x="470" y="180" width="120" height="60" rx="3"/>
+    <text class="ttl" x="530" y="215" text-anchor="middle">LM317</text>
+    <text class="sm" x="476" y="205">IN</text>
+    <text class="sm" x="584" y="192" text-anchor="end">OUT</text>
+    <text class="sm" x="530" y="235" text-anchor="middle">ADJ</text>
+    <polyline class="ln" points="590,195 650,195 650,215"/>
+    <rect class="res" x="641" y="215" width="18" height="50"/>
+    <line class="ln" x1="650" y1="265" x2="650" y2="290"/>
+    <text x="670" y="236">R5 3.3 Ω + 3.3 Ω</text>
+    <text class="sm" x="670" y="252">1.25 V ÷ 6.6 Ω ≈ 189 mA</text>
+    <polyline class="ln" points="530,240 530,290 650,290"/>
+    <circle class="dot" cx="650" cy="290" r="3.5"/>
+
+    <!-- R6 white only -->
+    <line class="ln" x1="650" y1="290" x2="700" y2="290"/>
+    <rect class="resd" x="700" y="281" width="80" height="18"/>
+    <text x="740" y="320" text-anchor="middle">R6 4 × 10 Ω</text>
+    <text class="sm" x="740" y="336" text-anchor="middle">white only (amber: wire)</text>
+    <line class="ln" x1="780" y1="290" x2="840" y2="290"/>
+
+    <!-- output + LED string -->
+    <circle class="screw" cx="840" cy="290" r="6"/>
+    <text x="856" y="286">J3</text>
+    <text class="sm" x="856" y="270">to module</text>
+    <line class="ln" x1="840" y1="296" x2="840" y2="306"/>
+    <polygon class="fillink" points="830,306 850,306 840,322"/>
+    <line class="ln" x1="828" y1="322" x2="852" y2="322"/>
+    <line class="ln" x1="840" y1="322" x2="840" y2="330"/>
+    <polygon class="fillink" points="830,330 850,330 840,346"/>
+    <line class="ln" x1="828" y1="346" x2="852" y2="346"/>
+    <line class="ln" x1="840" y1="346" x2="840" y2="366"/>
+    <text class="sm" x="856" y="332">LED string</text>
+    <text class="sm" x="856" y="346">(in module)</text>
+    <circle class="screw" cx="840" cy="372" r="6"/>
+    <line class="ln" x1="840" y1="378" x2="840" y2="385"/>
+    <text class="sm" x="856" y="376">J3 pin 3 → module pin 1</text>
+  </svg>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Ref</th><th>Part</th><th>Connects</th><th>Job</th></tr></thead>
+    <tbody>
+      <tr><td>R1</td><td>4.7k</td><td>J2 (D0/D1) → Q1 base</td><td>Limits base current from the XIAO pin (~0.55 mA).</td></tr>
+      <tr><td>R2</td><td>100k</td><td>Q1 base → GND</td><td>Holds Q1 off while the XIAO boots, so no flash at power-up.</td></tr>
+      <tr><td>Q1</td><td>2N3904</td><td>E → GND, C → R3</td><td>Shifts the 3.3 V signal so it can switch the 30 V side.</td></tr>
+      <tr><td>R3</td><td>4.7k ∥ 4.7k (≈2.35k)</td><td>Q1 collector → Q2 base</td><td>Drives Q2 with ~12 mA. Two resistors share ~0.35 W.</td></tr>
+      <tr><td>R4</td><td>4.7k</td><td>+30 V → Q2 base</td><td>Pulls Q2 off when Q1 is off.</td></tr>
+      <tr><td>Q2</td><td>2N5401</td><td>E → +30 V, C → LM317 IN</td><td>High-side switch, PWM at 1 kHz.</td></tr>
+      <tr><td>U1</td><td>LM317</td><td>IN ← Q2, OUT → R5, ADJ → output</td><td>Constant-current source. Takes the load from <strong>ADJ</strong>, not OUT.</td></tr>
+      <tr><td>R5</td><td>3.3 Ω + 3.3 Ω</td><td>LM317 OUT → ADJ</td><td>Sets ~189 mA. About 0.12 W each.</td></tr>
+      <tr><td>R6</td><td>4 × 10 Ω in series</td><td>ADJ → J3 pin 2 (white only)</td><td>Drops ~7.6 V so the white LM317 stays near 0.9 W. About 0.36 W each.</td></tr>
+      <tr><td>C1</td><td>47–100 µF, ≥50 V</td><td>Across J1, one per board</td><td>Steadies the rail during PWM.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>Pinouts</h2>
+  <div class="grid2">
+    <div class="card"><h3>2N3904 / 2N5401 (TO-92)</h3>
+<pre>flat face toward you, legs down
+
+     ┌─────┐
+     │     │
+     └┬─┬─┬┘
+      E B C</pre></div>
+    <div class="card"><h3>LM317 (TO-220)</h3>
+<pre>tab away from you, legs down
+
+   ┌───────┐
+   │ LM317 │
+   └─┬──┬──┬┘
+    ADJ OUT IN</pre>
+      <p class="lede">The tab is connected to OUT. Keep the two tabs from touching.</p></div>
+    <div class="card"><h3>LED module connector</h3>
+<pre>connector up, LEDs below
+
+ pin  1   2   3   4   5…
+      │   │   ✕   │   ✕
+     GND AMB     WHT</pre>
+      <p class="lede">Pin 1 is the leftmost.</p></div>
+    <div class="card"><h3>Perfboard connectors</h3>
+<pre>J1  +30V · GND        (from XL6019 OUT)
+J2  D0 · D1 · D3      (male header, Dupont)
+J3  AMB+ · WHT+ · GND (to module 2 · 4 · 1)
+    (two 2-pin blocks side by side,
+     4th position unused)
+BTN D3 pad · GND pad  (to button)</pre></div>
+  </div>
+</section>
+
+<section>
+  <h2>Bring-up order</h2>
+  <ol>
+    <li><strong>Measure the strings first.</strong> Put each string on the Jesverty in CC mode at 190 mA and note its forward voltage. Set the rail to <strong>amber Vf + 3.5 V</strong>, which should land near 28–30 V.</li>
+    <li><strong>Set the XL6019 with nothing on its output.</strong> Feed it 5 V and turn the trim pot until it reads the rail voltage from step 1. These modules can ship set to 35 V.</li>
+    <li><strong>Check the grounds.</strong> Confirm XL6019 IN− and OUT− are continuous.</li>
+    <li><strong>Test one channel.</strong> Wire J1 and J3 only, then jumper J2 pin 1 to 3.3 V in place of the XIAO. Measure about 189 mA in series with the LED wire.</li>
+    <li><strong>Check temperatures after 10 minutes.</strong> The LM317s, R3 pairs and R6 should be warm, not too hot to touch.</li>
+    <li><strong>Add the XIAO and the button,</strong> then flash the firmware.</li>
+  </ol>
+  <p class="warn"><strong>Power limit.</strong> Both strings at 100% would draw about 2.8 A from USB, right at the 5 V / 3 A limit. The firmware caps their combined PWM at 1.25 strings' worth (about 2 A). Only arcing mode lights both at once, and there the amber dims slightly during each white flash. Use a USB-C charger rated 5 V / 3 A.</p>
+</section>
+</div>

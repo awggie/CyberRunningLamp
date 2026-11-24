@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="690" viewBox="0 0 1000 690" role="img" aria-label="Top-down wiring of the CyberLamp base: XIAO, XL6019 boost module, driver perfboard, button and LED module wires">
+<style>svg {
+  --bg: #eef1f4; --panel: #ffffff; --ink: #1b2430; --muted: #5b6676; --rule: #c9d0d8; --accent: #b8680a;
+  --w30: #d0342c; --w5: #7b4fd6; --wgnd: #1b2430; --d0: #c8740a; --d1: #2378b5; --d3: #2e9a5a; --wwhite: #8a94a3;
+  --xiao: rgba(47,110,220,.14); --boost: rgba(208,52,44,.12); --perf: rgba(46,154,90,.13);
+  --sans: "IBM Plex Sans", -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+
+svg text { font-family: var(--sans); fill: var(--ink); font-size: 13px; }
+svg .sm { font-size: 11px; fill: var(--muted); }
+svg .mono { font-family: var(--mono); font-size: 11px; }
+svg .ttl { font-weight: 600; font-size: 14px; }
+svg .wall { fill: none; stroke: var(--muted); stroke-width: 3; }
+svg .part { stroke: var(--ink); stroke-width: 1.5; }
+svg .xiao { fill: var(--xiao); } svg .boost { fill: var(--boost); } svg .perf { fill: var(--perf); }
+svg .blk { fill: var(--panel); stroke: var(--ink); stroke-width: 1.5; }
+svg .dash { fill: none; stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 5 4; }
+svg .w { fill: none; stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+svg .thin { fill: none; stroke-width: 2; }
+svg .w30 { stroke: var(--w30); } svg .w5 { stroke: var(--w5); } svg .wg { stroke: var(--wgnd); }
+svg .d0 { stroke: var(--d0); } svg .d1 { stroke: var(--d1); } svg .d3 { stroke: var(--d3); } svg .ww { stroke: var(--wwhite); }
+svg .pin { fill: var(--panel); stroke: var(--ink); stroke-width: 1.2; }
+svg .pinon { fill: var(--ink); }
+svg .screw { fill: var(--panel); stroke: var(--ink); stroke-width: 1.2; }
+svg .ln { stroke: var(--ink); stroke-width: 2; fill: none; }
+svg .dot { fill: var(--ink); }
+svg .res { fill: var(--panel); stroke: var(--ink); stroke-width: 2; }
+svg .resd { fill: var(--panel); stroke: var(--ink); stroke-width: 2; stroke-dasharray: 5 3; }
+svg .fillink { fill: var(--ink); }
+</style>
+<rect x="0" y="0" width="1000" height="690" fill="#ffffff"/>
+    <!-- tub -->
+    <rect class="wall" x="40" y="40" width="920" height="600" rx="26"/>
+    <text class="sm" x="60" y="30">BACK WALL</text>
+    <text class="sm" x="60" y="664">FRONT WALL (vents, button)</text>
+
+    <!-- USB-C port -->
+    <rect class="blk" x="640" y="33" width="40" height="14" rx="4"/>
+    <text class="sm" x="692" y="30">USB-C in · 5 V / 3 A charger</text>
+
+    <!-- XIAO -->
+    <rect class="part xiao" x="580" y="60" width="160" height="150" rx="6"/>
+    <text class="ttl" x="660" y="140" text-anchor="middle">XIAO ESP32S3</text>
+    <text class="sm" x="660" y="157" text-anchor="middle">parts up, pins up</text>
+    <text class="sm" x="660" y="173" text-anchor="middle">U.FL antenna on top</text>
+    <g class="mono">
+      <circle class="pin pinon" cx="580" cy="85" r="4"/><text x="590" y="89">D0</text>
+      <circle class="pin pinon" cx="580" cy="103" r="4"/><text x="590" y="107">D1</text>
+      <circle class="pin" cx="580" cy="121" r="4"/><text class="sm mono" x="590" y="125">D2</text>
+      <circle class="pin pinon" cx="580" cy="139" r="4"/><text x="590" y="143">D3</text>
+      <circle class="pin" cx="580" cy="157" r="4"/><text class="sm mono" x="590" y="161">D4</text>
+      <circle class="pin" cx="580" cy="175" r="4"/><text class="sm mono" x="590" y="179">D5</text>
+      <circle class="pin" cx="580" cy="193" r="4"/><text class="sm mono" x="590" y="197">D6</text>
+      <circle class="pin pinon" cx="740" cy="85" r="4"/><text x="730" y="89" text-anchor="end">5V</text>
+      <circle class="pin pinon" cx="740" cy="103" r="4"/><text x="730" y="107" text-anchor="end">GND</text>
+      <circle class="pin" cx="740" cy="121" r="4"/><text class="sm mono" x="730" y="125" text-anchor="end">3V3</text>
+      <circle class="pin" cx="740" cy="139" r="4"/><text class="sm mono" x="730" y="143" text-anchor="end">D10</text>
+      <circle class="pin" cx="740" cy="157" r="4"/><text class="sm mono" x="730" y="161" text-anchor="end">D9</text>
+      <circle class="pin" cx="740" cy="175" r="4"/><text class="sm mono" x="730" y="179" text-anchor="end">D8</text>
+      <circle class="pin" cx="740" cy="193" r="4"/><text class="sm mono" x="730" y="197" text-anchor="end">D7</text>
+    </g>
+
+    <!-- Boost -->
+    <rect class="part boost" x="560" y="380" width="300" height="140" rx="4"/>
+    <text class="ttl" x="710" y="448" text-anchor="middle">XL6019 boost</text>
+    <text class="sm" x="710" y="466" text-anchor="middle">set to 30 V before connecting</text>
+    <rect class="blk" x="530" y="410" width="30" height="80" rx="3"/>
+    <circle class="screw" cx="545" cy="435" r="7"/><circle class="screw" cx="545" cy="465" r="7"/>
+    <text class="sm" x="545" y="402" text-anchor="middle">OUT</text>
+    <rect class="blk" x="860" y="410" width="30" height="80" rx="3"/>
+    <circle class="screw" cx="875" cy="435" r="7"/><circle class="screw" cx="875" cy="465" r="7"/>
+    <text class="sm" x="875" y="402" text-anchor="middle">IN</text>
+    <text class="mono" x="588" y="439">OUT+</text><text class="mono" x="588" y="469">OUT−</text>
+    <text class="mono" x="832" y="439" text-anchor="end">IN−</text><text class="mono" x="832" y="469" text-anchor="end">IN+</text>
+
+    <!-- Perfboard -->
+    <rect class="part perf" x="100" y="300" width="380" height="260" rx="4"/>
+    <line class="thin w30" x1="115" y1="318" x2="380" y2="318"/>
+    <text class="sm" x="118" y="312">+30 V bus</text>
+    <line class="thin wg" x1="115" y1="545" x2="440" y2="545"/>
+    <text class="sm" x="118" y="539">GND bus</text>
+    <rect class="dash" x="120" y="332" width="160" height="196" rx="4"/>
+    <text class="ttl" x="200" y="412" text-anchor="middle">Amber</text>
+    <text class="sm" x="200" y="430" text-anchor="middle">D0 → pin 2</text>
+    <text class="sm" x="200" y="446" text-anchor="middle">LM317 · 2N5401 · 2N3904</text>
+    <rect class="dash" x="292" y="332" width="133" height="196" rx="4"/>
+    <text class="ttl" x="358" y="412" text-anchor="middle">White</text>
+    <text class="sm" x="358" y="430" text-anchor="middle">D1 → pin 4</text>
+    <text class="sm" x="358" y="446" text-anchor="middle">+ 4 × 10 Ω</text>
+    <text class="sm" x="110" y="580">Driver perfboard · 60 × 40 mm</text>
+
+    <!-- J2 header -->
+    <rect class="blk" x="390" y="294" width="60" height="12" rx="2"/>
+    <circle class="pinon" cx="400" cy="300" r="3"/><circle class="pinon" cx="420" cy="300" r="3"/><circle class="pinon" cx="440" cy="300" r="3"/>
+    <text class="sm" x="458" y="290">J2</text>
+
+    <!-- J1 & J3 -->
+    <rect class="blk" x="450" y="420" width="30" height="60" rx="3"/>
+    <circle class="screw" cx="465" cy="435" r="7"/><circle class="screw" cx="465" cy="465" r="7"/>
+    <text class="sm" x="444" y="454" text-anchor="end">J1</text>
+    <rect class="blk" x="450" y="490" width="30" height="60" rx="3"/>
+    <circle class="screw" cx="465" cy="502" r="6"/><circle class="screw" cx="465" cy="520" r="6"/><circle class="screw" cx="465" cy="538" r="6"/>
+    <text class="sm" x="444" y="524" text-anchor="end">J3</text>
+    <rect class="screw" x="400" y="555" width="10" height="10"/><rect class="screw" x="430" y="555" width="10" height="10"/>
+    <text class="sm" x="392" y="578" text-anchor="end">BTN pads</text>
+
+    <!-- Button -->
+    <rect class="blk" x="398" y="610" width="44" height="24" rx="3"/>
+    <circle class="fillink" cx="420" cy="622" r="6"/>
+    <text class="sm" x="390" y="627" text-anchor="end">Mode button</text>
+
+    <!-- Lid slot -->
+    <rect class="dash" x="500" y="585" width="60" height="22" rx="4"/>
+    <text class="sm" x="572" y="594">Lid slot: wires go up to the LED module</text>
+    <text class="sm" x="572" y="610">J3 → module pin 2 · pin 4 · pin 1</text>
+
+    <!-- Wires: power -->
+    <polyline class="w w5" points="740,85 920,85 920,465 890,465"/>
+    <polyline class="w wg" points="740,103 905,103 905,435 890,435"/>
+    <text class="sm" x="790" y="79">5 V</text>
+    <text class="sm" x="790" y="97">GND</text>
+    <polyline class="w w30" points="530,435 480,435"/>
+    <polyline class="w wg" points="530,465 480,465"/>
+    <!-- Wires: signals -->
+    <polyline class="w d0" points="580,85 400,85 400,300"/>
+    <polyline class="w d1" points="580,103 420,103 420,300"/>
+    <polyline class="w d3" points="580,139 440,139 440,300"/>
+    <text class="sm" x="470" y="79">D0</text><text class="sm" x="470" y="97">D1</text><text class="sm" x="470" y="133">D3</text>
+    <!-- Button wires -->
+    <polyline class="w d3" points="405,565 405,610"/>
+    <polyline class="w wg" points="435,565 435,610"/>
+    <!-- LED wires -->
+    <polyline class="w d0" points="480,502 510,502 510,585"/>
+    <polyline class="w ww" points="480,520 525,520 525,585"/>
+    <polyline class="w wg" points="480,538 540,538 540,585"/>
+  </svg>
