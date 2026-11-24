@@ -1,0 +1,11 @@
+# Wi-Fi credentials — never commit
+firmware/CyberLamp/secrets.h
+
+# Arduino / PlatformIO build output
+build/
+.pio/
+*.bin
+*.elf
+
+# macOS
+.DS_Store
