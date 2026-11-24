@@ -333,7 +333,7 @@ svg .fillink { fill: var(--ink); }
       <tr><td>Q2</td><td>2N5401</td><td>E → +30 V, C → LM317 IN</td><td>High-side switch, PWM at 1 kHz.</td></tr>
       <tr><td>U1</td><td>LM317</td><td>IN ← Q2, OUT → R5, ADJ → output</td><td>Constant-current source. Takes the load from <strong>ADJ</strong>, not OUT.</td></tr>
       <tr><td>R5</td><td>3.3 Ω + 3.3 Ω</td><td>LM317 OUT → ADJ</td><td>Sets ~189 mA. About 0.12 W each.</td></tr>
-      <tr><td>R6</td><td>4 × 10 Ω in series</td><td>ADJ → J3 pin 2 (white only)</td><td>Drops ~7.6 V so the white LM317 stays near 0.9 W. About 0.36 W each.</td></tr>
+      <tr><td>R6</td><td>4 × 10 Ω in series</td><td>ADJ → J3 pin 2 (white only)</td><td>Drops ~7.6 V so the white LM317 stays near 0.76 W. About 0.36 W each.</td></tr>
       <tr><td>C1</td><td>47–100 µF, ≥50 V</td><td>Across J1, one per board</td><td>Steadies the rail during PWM.</td></tr>
     </tbody>
   </table></div>
@@ -376,7 +376,7 @@ BTN D3 pad · GND pad  (to button)</pre></div>
 <section>
   <h2>Bring-up order</h2>
   <ol>
-    <li><strong>Measure the strings first.</strong> Put each string on the Jesverty in CC mode at 190 mA and note its forward voltage. Set the rail to <strong>amber Vf + 3.5 V</strong>, which should land near 28–30 V.</li>
+    <li><strong>Measure the strings first.</strong> Put each string on the Jesverty in CC mode at 190 mA and note its forward voltage. Set the rail to <strong>amber Vf + 3.5 V</strong>, This module measured 25.56 V amber and 16.96 V white, so the rail is <strong>30.0 V</strong>.</li>
     <li><strong>Set the XL6019 with nothing on its output.</strong> Feed it 5 V and turn the trim pot until it reads the rail voltage from step 1. These modules can ship set to 35 V.</li>
     <li><strong>Check the grounds.</strong> Confirm XL6019 IN− and OUT− are continuous.</li>
     <li><strong>Test one channel.</strong> Wire J1 and J3 only, then jumper J2 pin 1 to 3.3 V in place of the XIAO. Measure about 189 mA in series with the LED wire.</li>

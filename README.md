@@ -30,6 +30,8 @@ Pins are numbered **1 = leftmost**, with the board oriented connector-up and LED
 Notes from bench testing on the Jesverty SPS-3010V in CC mode:
 - 30 mA is plenty bright for ambient use. The amber string handled a brief 730 mA (~20 W) burst with no damage and no heat concerns.
 - The amber string won't light below about 22 V. That's why it looked dead when probing stopped at 20 V.
+- Forward voltage at the 189 mA design current (module warm): **amber 25.56 V, white 16.96 V**.
+- Heat, amber string, hottest spot on a thermal camera: **107 °F (42 °C) at 189 mA** and 111 °F (44 °C) at 230 mA after several minutes. The heatsink easily handles the design current.
 - The "yellow" chips are phosphor-converted **white** LEDs; the orange chips are phosphor-converted **amber**.
 
 ---
@@ -44,10 +46,10 @@ USB-C 5 V ──► XIAO ESP32S3 ──5V/GND pins──► XL6019 boost ──�
                     │ D3 ◄── mode button                                                            module pin 1 ─► GND
 ```
 
-- **Why a 30 V rail:** the amber string needs ~24.5–25 V at 189 mA (its forward voltage rises with current), plus ~3.5 V of headroom for the LM317, its current-set resistor and the PNP switch. Set the rail from your own measurement: **amber Vf at 190 mA + 3.5 V**.
+- **Why a 30 V rail:** the amber string measured 25.56 V at 189 mA. Add 1.25 V for the current-set resistor, ~0.2 V for the PNP switch and ~2 V for the LM317 to regulate, and it needs ~29 V. 30 V leaves ~1 V of margin, which also covers the slightly higher voltage of cold LEDs. Don't set it below 29.5 V. The amber LM317 drops ~3 V (~0.57 W).
 - **Why two separate current sources:** pin 1 is a shared negative, so the strings can't be switched independently on the low side. Each one gets its own LM317 current source and its own high-side PNP switch.
 - **Current per string:** 1.25 V ÷ 6.6 Ω ≈ **189 mA** at full PWM. That's the ceiling; the web sliders and effects only go dimmer. 30 mA (about 15%) was already plenty for ambient light on the bench, so full scale is room-light bright.
-- **Why the white string has 40 Ω in series:** it needs ~8 V less than the amber string. Without the resistors its LM317 would burn ~2.3 W, which is too hot without a heatsink. Four 10 Ω resistors take ~1.4 W of that, leaving the LM317 at ~0.9 W.
+- **Why the white string has 40 Ω in series:** it needs ~8 V less than the amber string. Without the resistors its LM317 would burn ~2.2 W, which is too hot without a heatsink. Four 10 Ω resistors drop 7.56 V (~1.4 W), leaving the LM317 ~4 V (twice what it needs to regulate) and ~0.76 W. Measured: white 16.96 V at 189 mA.
 - **Power budget:** one string at full draws ~1.5 A from USB-C, and both at full would draw ~2.8 A. The firmware caps the two strings' combined PWM at 1.25 strings' worth, about **2 A from USB-C** including the ESP32 (see [Power cap](#power-cap)). Use a USB-C charger rated **5 V / 3 A**.
 
 ## Wiring
@@ -105,7 +107,7 @@ Everything required is already in the office. IDs refer to `awggie/PartsInventor
 |---|---|---|---|---|
 | 1 | Seeed XIAO ESP32S3 | MCU-003 (2 on hand) | Drawer 2 | Headers not soldered yet. Also needs its 2.4 GHz antenna on the U.FL connector |
 | 1 | XL6019 boost module | MOD-006 (2 on hand) | Parts bin row 4 | ~5–35 V out; set the rail **before** connecting anything |
-| 2 | LM317 (TO-220) | REG-001 (5) / IC-001 (2) | Drawer 2 | No heatsink needed: ~0.9 W on white (with R6), less on amber |
+| 2 | LM317 (TO-220) | REG-001 (5) / IC-001 (2) | Drawer 2 | No heatsink needed: ~0.76 W on white (with R6), ~0.57 W on amber |
 | 2 | 2N5401 PNP | TR-001 | Drawer 2 | 150 V rated. 2N2907A (60 V) also works |
 | 2 | 2N3904 NPN | TR-001 | Drawer 2 | 2N2222 / BC547 also fine |
 | — | Resistors per channel: 4.7 kΩ ×4, 100 kΩ ×1, 3.3 Ω ×2 | RES-001 | Drawer 3 | 1/2 W metal film. Double these for two channels |
@@ -124,7 +126,7 @@ Everything required is already in the office. IDs refer to `awggie/PartsInventor
 
 ## Build and bring-up
 
-1. **Measure the strings first.** Put each string on the bench supply in CC mode at 190 mA and note its forward voltage. Set the rail to **amber Vf + 3.5 V**; it should land near 28–30 V.
+1. **Measure the strings first.** Put each string on the bench supply in CC mode at 190 mA and note its forward voltage. Set the rail to **amber Vf + 3.5 V**. This module measured 25.56 V amber and 16.96 V white, so the rail is **30.0 V**.
 2. **Set the boost with nothing connected.** Power the XL6019 from the bench supply at 5 V (current limit ~1 A) with nothing on its output. Turn its trim pot until your multimeter reads the rail voltage from step 1. These modules can ship set to 35 V.
 3. **Check the grounds.** Confirm XL6019 IN− and OUT− are continuous.
 4. **Breadboard one channel.** Wire the amber channel per the schematic and feed it from the boost. Drive R1 with a jumper to 3.3 V instead of the XIAO. Measure about 189 mA with the DMM in series with the LED wire.
