@@ -123,3 +123,11 @@ If Wi-Fi is down or not configured, the lamp still runs on the button and serial
 ### Security note
 
 The control page has no login: anyone on your home network can change the lamp. That's normal for a LAN gadget, but **don't port-forward it to the internet**. For remote access, use a VPN into your home network (e.g. Tailscale) instead.
+
+---
+
+## License
+
+[MIT](LICENSE). Build your own, remix it, and share it.
+
+Working with salvaged automotive LED modules is at your own risk. These LEDs are bright enough to hurt your eyes up close, so always bring them up with a current-limited supply.
