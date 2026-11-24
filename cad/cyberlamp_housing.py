@@ -114,7 +114,8 @@ button_center_z = 17.0
 
 # Circuit boards inside the base. Each sits on four pads (screwed through its corner holes)
 # between two low side rails that locate it by its edges, so hole-position error doesn't matter much.
-board_screw_pilot_diameter = 2.2             # M2.6 self-tapping screws (HW-001)
+boost_screw_pilot_diameter = 2.2             # M2.6 self-tapping screws (HW-001) through the boost board's 3.2 mm holes
+perfboard_screw_pilot_diameter = 1.6         # M2 self-tapping screws (HW-001) through the perfboard's 2.0 mm holes
 board_pad_diameter = 6.0
 board_rail_thickness = 1.2
 board_rail_lip_above_board = 1.0
@@ -131,10 +132,10 @@ boost_board_center = (45.0, 6.0)             # leaves ~2 mm between the IN termi
 boost_pad_height = 3.5                       # clears through-hole pins under the terminals
 
 # Driver perfboard (LM317s, transistors, resistors). Default: 60 x 40 mm proto board (PROTO-004).
-# Corner-hole inset varies by brand — measure yours and update perfboard_hole_inset.
+# Measured from Adam's board: 2.0 mm corner holes, centers 2.0 mm in from each edge.
 perfboard_length = 60.0
 perfboard_width = 40.0
-perfboard_hole_inset = 2.5                   # hole center distance from each edge
+perfboard_hole_inset = 2.0                   # hole center distance from each edge
 perfboard_center = (-18.0, 9.0)
 perfboard_pad_height = 4.0                   # room for solder joints and clipped leads underneath
 
@@ -212,7 +213,7 @@ def hex_vent_cutter(plane_name, centers_2d, depth, offset_along_normal):
 	return cutter
 
 
-def board_mount(board_center, board_length, board_width, hole_spacing_long, hole_spacing_short, pad_height, floor_z):
+def board_mount(board_center, board_length, board_width, hole_spacing_long, hole_spacing_short, pad_height, floor_z, pilot_diameter):
 	"""
 	Four screw pads at the board's corner holes, plus two rails along the long edges that
 	locate the board. The short ends stay open for overhanging terminals and wiring.
@@ -233,7 +234,7 @@ def board_mount(board_center, board_length, board_width, hole_spacing_long, hole
 			)
 			pilot = (
 				cq.Workplane("XY")
-				.circle(board_screw_pilot_diameter / 2)
+				.circle(pilot_diameter / 2)
 				.extrude(pad_height)
 				.translate((pad_x, pad_y, floor_z + 0.6))  # keep 0.6 mm of floor under each pilot
 			)
@@ -477,11 +478,13 @@ def build_base_tub():
 	boost_mount, boost_pilots = board_mount(
 		boost_board_center, boost_board_length, boost_board_width,
 		boost_hole_spacing_long, boost_hole_spacing_short, boost_pad_height, base_floor_thickness,
+		boost_screw_pilot_diameter,
 	)
 	perfboard_mount, perfboard_pilots = board_mount(
 		perfboard_center, perfboard_length, perfboard_width,
 		perfboard_length - 2 * perfboard_hole_inset, perfboard_width - 2 * perfboard_hole_inset,
 		perfboard_pad_height, base_floor_thickness,
+		perfboard_screw_pilot_diameter,
 	)
 	tub = tub.union(boost_mount).union(perfboard_mount).cut(boost_pilots).cut(perfboard_pilots)
 
