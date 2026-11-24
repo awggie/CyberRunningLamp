@@ -112,6 +112,32 @@ button_actuator_hole_diameter = 3.8
 button_center_x = 7.5
 button_center_z = 17.0
 
+# Circuit boards inside the base. Each sits on four pads (screwed through its corner holes)
+# between two low side rails that locate it by its edges, so hole-position error doesn't matter much.
+board_screw_pilot_diameter = 2.2             # M2.6 self-tapping screws (HW-001)
+board_pad_diameter = 6.0
+board_rail_thickness = 1.2
+board_rail_lip_above_board = 1.0
+board_edge_clearance = 0.3
+
+# XL6019 boost module (measured 49.88 x 28.22 mm; 3.2 mm holes; centers from top-down photo + calipers).
+# Long axis along X. Screw terminals overhang both short ends, so those ends have no rails.
+# OUT end faces -X (toward the driver perfboard), IN end faces +X.
+boost_board_length = 49.88
+boost_board_width = 28.22
+boost_hole_spacing_long = 43.4
+boost_hole_spacing_short = 21.7
+boost_board_center = (45.0, 6.0)             # leaves ~2 mm between the IN terminal and the right wall
+boost_pad_height = 3.5                       # clears through-hole pins under the terminals
+
+# Driver perfboard (LM317s, transistors, resistors). Default: 60 x 40 mm proto board (PROTO-004).
+# Corner-hole inset varies by brand — measure yours and update perfboard_hole_inset.
+perfboard_length = 60.0
+perfboard_width = 40.0
+perfboard_hole_inset = 2.5                   # hole center distance from each edge
+perfboard_center = (-18.0, 9.0)
+perfboard_pad_height = 4.0                   # room for solder joints and clipped leads underneath
+
 # Hex vents
 vent_hex_across_flats = 5.0
 vent_hex_pitch = 7.0
@@ -184,6 +210,47 @@ def hex_vent_cutter(plane_name, centers_2d, depth, offset_along_normal):
 		)
 		cutter = prism if cutter is None else cutter.union(prism)
 	return cutter
+
+
+def board_mount(board_center, board_length, board_width, hole_spacing_long, hole_spacing_short, pad_height, floor_z):
+	"""
+	Four screw pads at the board's corner holes, plus two rails along the long edges that
+	locate the board. The short ends stay open for overhanging terminals and wiring.
+	Returns (solid_to_add, pilot_holes_to_cut).
+	"""
+	center_x, center_y = board_center
+	mount = None
+	pilots = None
+	for sign_x in (-1, 1):
+		for sign_y in (-1, 1):
+			pad_x = center_x + sign_x * hole_spacing_long / 2
+			pad_y = center_y + sign_y * hole_spacing_short / 2
+			pad = (
+				cq.Workplane("XY")
+				.circle(board_pad_diameter / 2)
+				.extrude(pad_height + 0.01)
+				.translate((pad_x, pad_y, floor_z - 0.01))
+			)
+			pilot = (
+				cq.Workplane("XY")
+				.circle(board_screw_pilot_diameter / 2)
+				.extrude(pad_height)
+				.translate((pad_x, pad_y, floor_z + 0.6))  # keep 0.6 mm of floor under each pilot
+			)
+			mount = pad if mount is None else mount.union(pad)
+			pilots = pilot if pilots is None else pilots.union(pilot)
+	rail_height = pad_height + 1.6 + board_rail_lip_above_board
+	rail_length = board_length * 0.6             # shorter than the board, so corners stay reachable
+	for sign_y in (-1, 1):
+		rail_y = center_y + sign_y * (board_width / 2 + board_edge_clearance + board_rail_thickness / 2)
+		rail = (
+			cq.Workplane("XY")
+			.rect(rail_length, board_rail_thickness)
+			.extrude(rail_height + 0.01)
+			.translate((center_x, rail_y, floor_z - 0.01))
+		)
+		mount = mount.union(rail)
+	return mount, pilots
 
 
 def hex_grid(u_min, u_max, v_min, v_max):
@@ -406,6 +473,18 @@ def build_base_tub():
 	)
 	tub = tub.union(cradle_block).cut(cradle_pocket)
 
+	# Boost module and driver perfboard mounts
+	boost_mount, boost_pilots = board_mount(
+		boost_board_center, boost_board_length, boost_board_width,
+		boost_hole_spacing_long, boost_hole_spacing_short, boost_pad_height, base_floor_thickness,
+	)
+	perfboard_mount, perfboard_pilots = board_mount(
+		perfboard_center, perfboard_length, perfboard_width,
+		perfboard_length - 2 * perfboard_hole_inset, perfboard_width - 2 * perfboard_hole_inset,
+		perfboard_pad_height, base_floor_thickness,
+	)
+	tub = tub.union(boost_mount).union(perfboard_mount).cut(boost_pilots).cut(perfboard_pilots)
+
 	# USB-C port through the back wall, centered on the XIAO's connector
 	usb_center_z = base_floor_thickness + xiao_cradle_floor_height + 1.0 + 1.6
 	usb_slot = (
@@ -600,6 +679,68 @@ def build_module_proxy():
 	)
 	proxy = plate.union(boss).union(back_block)
 	return proxy.translate((0, 0, module_plate_bottom_z))
+
+
+def build_electronics_proxies():
+	"""Simple boxes for the three boards (renders only), so the interior layout can be checked."""
+	terminal_overhang = 2.9
+	boost = (
+		cq.Workplane("XY")
+		.rect(boost_board_length, boost_board_width)
+		.extrude(1.6)
+		.translate((boost_board_center[0], boost_board_center[1], base_floor_thickness + boost_pad_height))
+	)
+	# Terminal blocks overhanging both short ends, and the two tall electrolytic caps
+	for sign in (-1, 1):
+		terminal = (
+			cq.Workplane("XY")
+			.rect(7.5, 10.0)
+			.extrude(10.0)
+			.translate((
+				boost_board_center[0] + sign * (boost_board_length / 2 - 7.5 / 2 + terminal_overhang),
+				boost_board_center[1],
+				base_floor_thickness + boost_pad_height + 1.6,
+			))
+		)
+		capacitor = (
+			cq.Workplane("XY")
+			.circle(4.0)
+			.extrude(11.0)
+			.translate((
+				boost_board_center[0] + sign * 12.0,
+				boost_board_center[1] + 8.0,
+				base_floor_thickness + boost_pad_height + 1.6,
+			))
+		)
+		boost = boost.union(terminal).union(capacitor)
+
+	perfboard = (
+		cq.Workplane("XY")
+		.rect(perfboard_length, perfboard_width)
+		.extrude(1.6)
+		.translate((perfboard_center[0], perfboard_center[1], base_floor_thickness + perfboard_pad_height))
+	)
+	# Two LM317s standing upright (TO-220 body + tab)
+	for offset in (-12.0, 12.0):
+		regulator = (
+			cq.Workplane("XY")
+			.rect(10.2, 4.6)
+			.extrude(19.0)
+			.translate((perfboard_center[0] + offset, perfboard_center[1] + 10.0, base_floor_thickness + perfboard_pad_height + 1.6))
+		)
+		perfboard = perfboard.union(regulator)
+
+	xiao = (
+		cq.Workplane("XY")
+		.rect(xiao_board_width, xiao_board_length)
+		.extrude(1.0)
+		.translate((
+			xiao_center_x,
+			base_y_max - base_wall_thickness - 0.3 - xiao_fit_clearance - xiao_board_length / 2,
+			base_floor_thickness + xiao_cradle_floor_height,
+		))
+	)
+	return boost, perfboard, xiao
 
 
 # ============================================================

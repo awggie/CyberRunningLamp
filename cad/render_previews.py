@@ -112,6 +112,11 @@ def main():
 	render(assembly, "assembly_front.png", camera_direction=(0.55, -1.0, 0.55), zoom=1.15)
 	render(assembly, "assembly_back.png", camera_direction=(-0.45, 1.0, 0.45), zoom=1.15)
 	render([(tub, dark_body)], "base_tub.png", camera_direction=(0.35, -0.6, 1.0), zoom=1.2)
+	boost_proxy, perfboard_proxy, xiao_proxy = housing.build_electronics_proxies()
+	render(
+		[(tub, dark_body), (boost_proxy, (0.85, 0.15, 0.15)), (perfboard_proxy, (0.15, 0.6, 0.3)), (xiao_proxy, (0.2, 0.45, 0.9))],
+		"base_interior_layout.png", camera_direction=(0.0, -0.35, 1.0), elevation_up=(0, 1, 0), zoom=1.25,
+	)
 	render([(lid, lid_color)], "base_lid.png", camera_direction=(0.5, -0.9, 0.7), zoom=1.15)
 	render([(cap, amber_glow)], "diffuser_cap.png", camera_direction=(-0.9, -0.7, -0.35), zoom=1.1)
 	render(

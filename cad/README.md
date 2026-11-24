@@ -35,6 +35,19 @@ The cap is currently set to **0.45 mm** (between rings 1 and 2), a starting gues
 | 4 | Black ~M3 pan-head screws, 10–12 mm | HW-005 | Lid → corner posts (2.5 mm pilots; they self-tap into PETG). M3×6 self-tappers (HW-001) also work, with less bite |
 | 1 | 6×6 tactile switch with a tall round actuator (~12 mm) | SW-001 | Mode button: press into the pocket behind the front wall, stem through the 3.8 mm hole, then a dab of hot glue |
 | 1 | XIAO ESP32S3 | MCU-003 | Drops into the cradle at the back wall; USB-C lines up with the port |
+| 1 | XL6019 boost module | MOD-006 | Front-right pads + side rails. OUT terminal faces the perfboard, IN faces the right wall |
+| 1 | 60 × 40 mm perfboard | PROTO-004 | Front-left pads + side rails. Holds the LM317s, transistors and resistors |
+| 8 | M2.6×6 self-tapping screws | HW-001 | Boards → pads (2.2 mm pilot holes) |
+
+## Inside the base
+
+![Interior layout](renders/base_interior_layout.png)
+
+Red is the XL6019 boost module, green is the driver perfboard (two LM317s standing), and blue is the XIAO in its cradle. Each board sits on four screw pads between two short side rails, so it's located by its edges even if a hole is slightly off. The short ends stay open for the screw terminals and wiring.
+
+- **Boost module:** 49.88 × 28.22 mm, hole centers 43.4 × 21.7 mm (from calipers plus a top-down photo), on 3.5 mm pads.
+- **Perfboard:** defaults to a 60 × 40 mm board with corner holes 2.5 mm in from each edge, on 4 mm pads that leave room for solder joints. **Measure your board's hole inset** and set `perfboard_hole_inset` (or change the board size) before printing the tub.
+- Tallest parts: LM317s reach 27 mm from the desk; the lid underside is at 34 mm.
 
 ## Layout facts
 
