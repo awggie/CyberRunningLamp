@@ -92,7 +92,7 @@ Layout matches the mounts in the 3D printed base: driver perfboard front-left, X
 TO-92 pinout for both transistors, flat face toward you, legs down: **E – B – C**. LM317 (TO-220), tab away from you, legs down: **ADJ – OUT – IN**. The LM317 tab is connected to OUT, so keep the two tabs from touching. Double-check against the datasheet for the exact parts you pull.
 
 - XIAO pin **HIGH → NPN on → PNP on → LEDs lit**. The logic isn't inverted.
-- **Perfboard layout:** run the +30 V and GND buses as bare wires along the two long edges, stand the LM317s at the back edge with tabs facing out, and stand every resistor upright. Use screw terminals for J1 (one 2-pin block) and J3 (two 2-pin blocks side by side, one position spare), and a 3-pin female header for J2.
+- **Perfboard layout:** run the +30 V and GND buses as bare wires along the two long edges, stand the LM317s at the back edge with tabs facing out, and stand every resistor upright. Use screw terminals for J1 (a 2-pin block) and J3 (a 3-pin block), and a 3-pin female header for J2.
 - Every ground is shared: XIAO GND, XL6019 IN−/OUT−, both 2N3904 emitters, both R2s, the button and module pin 1.
 
 ---
@@ -113,7 +113,7 @@ Everything required is already in the office. IDs refer to `awggie/PartsInventor
 | 1 | Electrolytic cap, ≥50 V | CAP-003 | Drawer 3 | 47–100 µF if the kit has one at 50 V; otherwise 2–4 × 10 µF/50 V in parallel |
 | 1 | Tactile push button | SW-001 | Bottom drawer | Mode cycling |
 | 1 | 60 × 40 mm perfboard | PROTO-004 | Parts bin row 3 | Breadboard first on PROTO-002 |
-| 3 | 2-pin screw terminals | CON-009 | Parts bin row 3 | J1 ×1, J3 ×2 |
+| 1 + 1 | Screw terminals: one 2-pin, one 3-pin | CON-009 | Parts bin row 3 | 2-pin for J1, 3-pin for J3 |
 | — | Pin headers (male for the XIAO, female 3-pin for J2) | CON-008 | Parts bin row 3 | |
 | 3 | F-F Dupont jumpers | CAB-004 | Top drawer | XIAO D0/D1/D3 → J2 |
 | — | 24 AWG wire, heat shrink | WIRE-004, CONS-005 | Wire rack / parts bin | |
