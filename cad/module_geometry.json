@@ -1,0 +1,69 @@
+{
+ "holes_mm": {
+  "bottom_left": [
+   0.0,
+   0.0
+  ],
+  "bottom_right": [
+   63.53,
+   0.0
+  ],
+  "top": [
+   12.51,
+   53.959
+  ]
+ },
+ "hole_diameter_mm": 4.0,
+ "boss": {
+  "center_mm": [
+   41.542,
+   23.847
+  ],
+  "major_mm": 49.46,
+  "minor_mm": 42.03,
+  "major_axis_angle_deg": 123.99,
+  "height_above_plate_mm": 11.9
+ },
+ "plate_thickness_mm": 3.0,
+ "fin_block_corners_mm": [
+  [
+   -51.36,
+   59.88
+  ],
+  [
+   -2.84,
+   57.79
+  ],
+  [
+   -5.55,
+   -5.06
+  ],
+  [
+   -54.07,
+   -2.96
+  ]
+ ],
+ "right_edge_points_mm": [
+  [
+   69.14,
+   17.42
+  ],
+  [
+   68.52,
+   -5.13
+  ],
+  [
+   64.34,
+   -8.07
+  ]
+ ],
+ "photo_scale_mm_per_px": 0.11563,
+ "connector_center_mm": [
+  33.05,
+  17.82
+ ],
+ "led_array_center_mm": [
+  46.54,
+  29.97
+ ]
+}

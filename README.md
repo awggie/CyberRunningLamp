@@ -126,6 +126,14 @@ The control page has no login: anyone on your home network can change the lamp. 
 
 ---
 
+## 3D printed housing
+
+A parametric enclosure and diffuser, plus quick fit-test prints, live in [`cad/`](cad/). See [cad/README.md](cad/README.md) for print settings and assembly.
+
+![Assembly render](cad/renders/assembly_front.png)
+
+---
+
 ## License
 
 [MIT](LICENSE). Build your own, remix it, and share it.
